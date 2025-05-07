@@ -21,6 +21,10 @@ This project was born from the need to unify fragmented data across multiple sys
 - SQLite3 / PostgreSQL
 - Other dependencies in `requirements.txt`
 
+### Disclaimer
+
+This project was built for **internal use** in my work environment. It is unlikely to work out of the box for other use cases without adjustments.
+
 ---
 
 ## 🇧🇷 Português (BR)
@@ -43,3 +47,7 @@ O projeto surgiu da necessidade de unificar informações espalhadas em diferent
 - Django 4.x
 - SQLite3 / PostgreSQL
 - Outras dependências no `requirements.txt`
+
+### Aviso
+
+Este projeto foi desenvolvido para **uso interno** no meu ambiente de trabalho. É pouco provável que funcione em outros contextos sem adaptações.
