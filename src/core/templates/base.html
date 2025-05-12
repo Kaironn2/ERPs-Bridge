@@ -1,0 +1,32 @@
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ERPs Bridge{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Logo</h1>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{%% url 'home' %%}">Home</a></li>
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Perfil</a></li>
+                    <li><a href="#">Configurações</a></li>
+                    <li><a href="#">Sair</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="content">
+            {% block content %}
+            <!-- Conteúdo da página -->
+            {% endblock %}
+        </main>
+    </div>
+</body>
+</html>

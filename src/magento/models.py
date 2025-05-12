@@ -1,10 +1,12 @@
 from django.db import models
 
 
-class MgtCustomer(models.Model):
-    customer_external_id = models.IntegerField(unique=True, blank=True, null=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+class Customer(models.Model):
+    customer_external_id = models.IntegerField(
+        unique=True, blank=True, null=True
+    )
+    firstname = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
     cpf = models.CharField(max_length=11, unique=True)
     phone = models.CharField(max_length=20)
@@ -14,8 +16,7 @@ class MgtCustomer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta: 
-
+    class Meta:
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
 
@@ -44,15 +45,20 @@ class BuyOrder(models.Model):
 
     def __str__(self):
         return str(self.buy_order)
-    
+
 
 class BuyOrderDetail(models.Model):
-    email = models.ForeignKey(MgtCustomer, on_delete=models.PROTECT, related_name='buy_order_details')
-    buy_order = models.ForeignKey(BuyOrder, on_delete=models.PROTECT, related_name='buy_order_details')
+    email = models.ForeignKey(
+        Customer, on_delete=models.PROTECT, related_name='buy_order_details'
+    )
+    buy_order = models.ForeignKey(
+        BuyOrder, on_delete=models.PROTECT, related_name='buy_order_details'
+    )
     buy_order_external_id = models.IntegerField(unique=True)
     purchase_date = models.DateTimeField()
     status = models.CharField(max_length=255)
     payment_type = models.CharField(max_length=255)
+    quantity_sold = models.IntegerField()
     shipping_amount = models.DecimalField(max_digits=10, decimal_places=2)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -66,8 +72,10 @@ class BuyOrderDetail(models.Model):
 
         indexes = [
             models.Index(fields=['email'], name='buyorderdetail_email_idx'),
-            models.Index(fields=['buy_order'], name='buyorderdetail_buy_order_idx'),
+            models.Index(
+                fields=['buy_order'], name='buyorderdetail_buy_order_idx'
+            ),
         ]
-        
+
     def __str__(self):
         return str(self.buy_order_external_id)

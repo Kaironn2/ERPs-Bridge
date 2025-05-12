@@ -1,0 +1,56 @@
+[project]
+name = "erps-bridge"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kaironn3",email = "jonathas_oliveira17@hotmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dependencies = [
+    "django (>=5.2.1,<6.0.0)",
+    "django-jazzmin (>=3.0.1,<4.0.0)",
+    "django-restframework (>=0.0.1,<0.0.2)",
+    "python-decouple (>=3.8,<4.0)",
+    "pandas (>=2.2.3,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations', 'settings.py', 'manage.py']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.pytest.ini_options]
+pythonpath = 'src'
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+lint = 'ruff check'
+format = 'ruff format'
+post_format = 'ruff check --fix'
+pre_run = 'task format && task lint'
+run = 'python src/manage.py runserver'
+pre_test = 'task lint'
+test = 'pytest -s -x --cov=src/magento -vv'
+post_test = 'coverage html'
+migrate = 'python src/manage.py makemigrations && python src/manage.py migrate'
+superuser = 'python src/manage.py createsuperuser'
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+taskipy = "^1.14.1"
+ruff = "^0.11.9"
+

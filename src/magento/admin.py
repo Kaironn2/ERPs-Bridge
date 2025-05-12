@@ -1,23 +1,31 @@
 from django.contrib import admin
 from django.urls import path
 
-from mgt.models import MgtCustomer, BuyOrder, BuyOrderDetail
+from magento.models import BuyOrder, BuyOrderDetail, Customer
 
 
-@admin.register(MgtCustomer)
-class MgtCustomerAdmin(admin.ModelAdmin):
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
     list_display = (
-        'customer_external_id', 'first_name', 'last_name', 'email', 'cpf', 'phone', 
-        'customer_group', 'customer_since', 'last_purchase', 'created_at', 'updated_at'
+        'customer_external_id',
+        'firstname',
+        'lastname',
+        'email',
+        'cpf',
+        'phone',
+        'customer_group',
+        'customer_since',
+        'last_purchase',
+        'created_at',
+        'updated_at',
     )
-    search_fields = ('email', 'cpf', 'first_name', 'last_name')
+    search_fields = ('email', 'cpf', 'firstname', 'lastname')
     list_filter = ('customer_group', 'customer_since', 'last_purchase')
     ordering = ('-customer_since',)
     list_per_page = 20
 
     def __str__(self):
         return self.customer_external_id
-    
 
 
 @admin.register(BuyOrder)
@@ -30,25 +38,37 @@ class BuyOrderAdmin(admin.ModelAdmin):
     def __str__(self):
         return str(self.buy_order)
 
-    change_list_template = 'admin/mgt/buy_order_details_change_list.html'
+    change_list_template = 'admin/magento/buy_order_change_list.html'
 
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('import-xml/', self.admin_site.admin_view(self.import_xml), name='buyorderdetails-import-xml'),
+            path(
+                'import-xml/',
+                self.admin_site.admin_view(self.import_xml),
+                name='buyorder-import-xml',
+            ),
         ]
         return custom_urls + urls
-    
+
     def import_xml(self, request):
         pass
-    
+
 
 @admin.register(BuyOrderDetail)
 class BuyOrderDetailAdmin(admin.ModelAdmin):
     list_display = (
-        'email', 'buy_order', 'buy_order_external_id', 'purchase_date', 
-        'status', 'payment_type', 'shipping_amount', 'discount_amount', 
-        'total_amount', 'created_at', 'updated_at'
+        'email',
+        'buy_order',
+        'buy_order_external_id',
+        'purchase_date',
+        'status',
+        'payment_type',
+        'shipping_amount',
+        'discount_amount',
+        'total_amount',
+        'created_at',
+        'updated_at',
     )
     search_fields = ('email__email', 'buy_order__buy_order')
     list_filter = ('status', 'payment_type')
