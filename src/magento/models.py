@@ -49,10 +49,10 @@ class BuyOrder(models.Model):
 
 class BuyOrderDetail(models.Model):
     email = models.ForeignKey(
-        Customer, on_delete=models.PROTECT, related_name='buy_order_details'
+        Customer, on_delete=models.PROTECT, related_name='buy_order_detail'
     )
     buy_order = models.ForeignKey(
-        BuyOrder, on_delete=models.PROTECT, related_name='buy_order_details'
+        BuyOrder, on_delete=models.PROTECT, related_name='buy_order_detail'
     )
     buy_order_external_id = models.IntegerField(unique=True)
     purchase_date = models.DateTimeField()

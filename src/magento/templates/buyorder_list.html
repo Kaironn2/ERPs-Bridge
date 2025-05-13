@@ -1,70 +1,65 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/buyorder_list.css' %}" />
+{% endblock %}
 
 {% block title %}Ordens de Compra{% endblock %}
 
 {% block content %}
-<h2>Ordens de Compra</h2>
+  <h2>Ordens de Compra</h2>
 
-<div class="filters" style="margin-bottom: 2rem;">
-    <form method="get" class="filter-form" style="display: flex; gap: 1rem; align-items: flex-end;">
-        <div>
-            <label for="order_id">ID do Pedido:</label>
-            <input type="text" id="order_id" name="order_id" class="form-control">
-        </div>
-        <div>
-            <label for="status">Status:</label>
-            <select id="status" name="status" class="form-control">
-                <option value="">Todos</option>
-                <option value="pago">Pago</option>
-                <option value="pendente">Pendente</option>
-                <option value="cancelado">Cancelado</option>
-            </select>
-        </div>
-        <div>
-            <label for="date">Data:</label>
-            <input type="date" id="date" name="date" class="form-control">
-        </div>
-        <button type="submit" class="button">Filtrar</button>
+  <div class="filters">
+    <form method="get" class="filter-form">
+      <div class="form-group">
+        <label for="order_id">ID do Pedido:</label>
+        <input type="text" id="order_id" name="order_id" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="status">Status:</label>
+        <select id="status" name="status" class="form-control">
+          <option value="">Todos</option>
+          <option value="pago">Pago</option>
+          <option value="pendente">Pendente</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="date">Data:</label>
+        <input type="date" id="date" name="date" class="form-control">
+      </div>
+      <button type="submit" class="btn">Filtrar</button>
     </form>
-</div>
+  </div>
 
-<div class="actions" style="margin-bottom: 1.5rem;">
-    <a href="#" class="button" style="margin-right: 1rem;">Importar Pedidos</a>
-    <a href="#" class="button">Exportar Pedidos</a>
-</div>
+  <div class="actions">
+    <a href="#" class="btn">Importar Pedidos</a>
+    <a href="#" class="btn">Exportar Pedidos</a>
+  </div>
 
-<table class="buyorders-table" style="width: 100%; border-collapse: collapse;">
+  <table class="buyorders-table">
     <thead>
-        <tr style="background: #eee;">
-            <th style="padding: 0.5rem; border-bottom: 1px solid #ccc;">ID</th>
-            <th style="padding: 0.5rem; border-bottom: 1px solid #ccc;">Cliente</th>
-            <th style="padding: 0.5rem; border-bottom: 1px solid #ccc;">Data</th>
-            <th style="padding: 0.5rem; border-bottom: 1px solid #ccc;">Status</th>
-            <th style="padding: 0.5rem; border-bottom: 1px solid #ccc;">Total</th>
-            <th style="padding: 0.5rem; border-bottom: 1px solid #ccc;">Ações</th>
-        </tr>
+      <tr>
+        <th>Ordem de Compra</th>
+        <th>ID da Ordem de Compra</th>
+        <th>Data da Compra</th>
+      </tr>
     </thead>
     <tbody>
-        <tr>
-            <td style="padding: 0.5rem;">1001</td>
-            <td style="padding: 0.5rem;">João Silva</td>
-            <td style="padding: 0.5rem;">2024-05-10</td>
-            <td style="padding: 0.5rem;">Pago</td>
-            <td style="padding: 0.5rem;">R$ 250,00</td>
-            <td style="padding: 0.5rem;">
-                <a href="#" class="button" style="padding: 0.25rem 0.75rem; font-size: 0.9rem;">Ver</a>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 0.5rem;">1002</td>
-            <td style="padding: 0.5rem;">Maria Souza</td>
-            <td style="padding: 0.5rem;">2024-05-11</td>
-            <td style="padding: 0.5rem;">Pendente</td>
-            <td style="padding: 0.5rem;">R$ 180,00</td>
-            <td style="padding: 0.5rem;">
-                <a href="#" class="button" style="padding: 0.25rem 0.75rem; font-size: 0.9rem;">Ver</a>
-            </td>
-        </tr>
+      {% for buyorder in buyorders %}
+        {% for detail in buyorder.buy_order_detail.all %}
+            <tr>
+                <td>{{ buyorder.buy_order }}</td>
+                <td>{{ detail.buy_order_external_id }}</td>
+                <td>{{ detail.purchase_date|date:"d/m/Y" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">Nenhuma ordem de compra encontrada.</td>
+            </tr>
+        {% endfor %}
+      {% endfor %}
     </tbody>
-</table>
+  </table>
 {% endblock %}

@@ -1,32 +1,78 @@
 {% load static %}
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ERPs Bridge{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/buttons.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sidebar.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/themes.css' %}" />
+  {% block extra_css %}{% endblock %}
+  <title>{% block title %}ERPs Bridge{% endblock %}</title>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="logo">
-                <h1>Logo</h1>
-            </div>
-            <nav class="menu">
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">Perfil</a></li>
-                    <li><a href="#">Configurações</a></li>
-                    <li><a href="#">Sair</a></li>
-                </ul>
-            </nav>
-        </aside>
-        <main class="content">
-            {% block content %}
-            <!-- Conteúdo da página -->
-            {% endblock %}
-        </main>
-    </div>
+  <div class="wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Logo</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <ul class="sidebar-accordion">
+          <li>
+            <button class="accordion-btn" type="button">Magento</button>
+            <ul class="accordion-content">
+              <li><a href="#"><span class="text">Ordens de Compra</span></a></li>
+              <li><a href="#"><span class="text">Clientes</span></a></li>
+            </ul>
+          </li>
+          <li>
+            <button class="accordion-btn" type="button">Eccosys</button>
+            <ul class="accordion-content">
+                <li><a href="#"><span class="text">Pedidos</span></a></li>
+            </ul>
+          </li>
+          <li>
+            <button class="accordion-btn" type="button">Financeiro</button>
+            <ul class="accordion-content">
+              <li><a href="#"><span class="text">Faturas</span></a></li>
+              <li><a href="#"><span class="text">Relatórios</span></a></li>
+            </ul>
+          </li>
+          <li>
+            <button class="accordion-btn" type="button">Configurações</button>
+            <ul class="accordion-content">
+              <li><a href="#"><span class="text">Usuários</span></a></li>
+              <li><a href="#"><span class="text">Permissões</span></a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"><span class="text">Sair</span></a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      {% block content %}
+      <!-- Conteúdo principal aqui -->
+      {% endblock %}
+    </main>
+  </div>
+  <script>
+    // JS simples para accordion
+    document.querySelectorAll('.accordion-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    });
+    // Inicialmente fecha todos
+    document.querySelectorAll('.accordion-content').forEach(ul => ul.style.display = 'none');
+  </script>
 </body>
 </html>

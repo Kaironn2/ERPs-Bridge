@@ -38,22 +38,6 @@ class BuyOrderAdmin(admin.ModelAdmin):
     def __str__(self):
         return str(self.buy_order)
 
-    change_list_template = 'admin/magento/buy_order_change_list.html'
-
-    def get_urls(self):
-        urls = super().get_urls()
-        custom_urls = [
-            path(
-                'import-xml/',
-                self.admin_site.admin_view(self.import_xml),
-                name='buyorder-import-xml',
-            ),
-        ]
-        return custom_urls + urls
-
-    def import_xml(self, request):
-        pass
-
 
 @admin.register(BuyOrderDetail)
 class BuyOrderDetailAdmin(admin.ModelAdmin):
