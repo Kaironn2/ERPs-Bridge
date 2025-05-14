@@ -5,8 +5,8 @@ class Customer(models.Model):
     customer_external_id = models.IntegerField(
         unique=True, blank=True, null=True
     )
-    firstname = models.CharField(max_length=255)
-    lastname = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
     cpf = models.CharField(max_length=11, unique=True)
     phone = models.CharField(max_length=20)

@@ -16,3 +16,7 @@ class BuyOrderFilterForm(forms.Form):
             attrs={'class': 'form-control', 'placeholder': 'Criado Em'}
         ),
     )
+
+
+class XMLUploadForm(forms.Form):
+    xml_file = forms.FileField(label='Arquivo XML', required=True)

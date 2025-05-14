@@ -1,7 +1,9 @@
-from django.views.generic import ListView
+from django.contrib import messages
+from django.views.generic import FormView, ListView
 
-from magento.forms import BuyOrderFilterForm
+from magento.forms import BuyOrderFilterForm, XMLUploadForm
 from magento.models import BuyOrder
+from magento.reports import BuyOrderReportImporter
 
 
 class BuyOrderView(ListView):
@@ -30,3 +32,16 @@ class BuyOrderView(ListView):
             self, 'filter_form', BuyOrderFilterForm()
         )
         return context
+
+
+class BuyOrderImportXMLView(FormView):
+    template_name = 'buyorder_import_xml.html'
+    form_class = XMLUploadForm
+    success_url = '/buyorders/'
+
+    def form_valid(self, form):
+        xml_file = form.cleaned_data['xml_file']
+        importer = BuyOrderReportImporter(xml_file)
+        importer.insert_new_buy_order()
+        messages.success(self.request, 'Importação realizada com sucesso!')
+        return super().form_valid(form)
