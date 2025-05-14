@@ -48,7 +48,7 @@ class BuyOrder(models.Model):
 
 
 class BuyOrderDetail(models.Model):
-    email = models.ForeignKey(
+    customer = models.ForeignKey(
         Customer, on_delete=models.PROTECT, related_name='buy_order_detail'
     )
     buy_order = models.ForeignKey(
@@ -58,7 +58,6 @@ class BuyOrderDetail(models.Model):
     purchase_date = models.DateTimeField()
     status = models.CharField(max_length=255)
     payment_type = models.CharField(max_length=255)
-    quantity_sold = models.IntegerField()
     shipping_amount = models.DecimalField(max_digits=10, decimal_places=2)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -71,7 +70,9 @@ class BuyOrderDetail(models.Model):
         verbose_name_plural = 'Detalhes das Ordens de Compra'
 
         indexes = [
-            models.Index(fields=['email'], name='buyorderdetail_email_idx'),
+            models.Index(
+                fields=['customer'], name='buyorderdetail_customer_idx'
+            ),
             models.Index(
                 fields=['buy_order'], name='buyorderdetail_buy_order_idx'
             ),

@@ -7,8 +7,8 @@ from magento.models import BuyOrder, BuyOrderDetail, Customer
 class CustomerAdmin(admin.ModelAdmin):
     list_display = (
         'customer_external_id',
-        'firstname',
-        'lastname',
+        'first_name',
+        'last_name',
         'email',
         'cpf',
         'phone',
@@ -18,7 +18,7 @@ class CustomerAdmin(admin.ModelAdmin):
         'created_at',
         'updated_at',
     )
-    search_fields = ('email', 'cpf', 'firstname', 'lastname')
+    search_fields = ('email', 'cpf', 'firs_tname', 'last_name')
     list_filter = ('customer_group', 'customer_since', 'last_purchase')
     ordering = ('-customer_since',)
     list_per_page = 20
@@ -41,7 +41,7 @@ class BuyOrderAdmin(admin.ModelAdmin):
 @admin.register(BuyOrderDetail)
 class BuyOrderDetailAdmin(admin.ModelAdmin):
     list_display = (
-        'email',
+        'customer',
         'buy_order',
         'buy_order_external_id',
         'purchase_date',

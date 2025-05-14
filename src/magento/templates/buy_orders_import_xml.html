@@ -14,10 +14,10 @@
       <div id="file-list" style="margin-top:1rem;"></div>
     </div>
     <button type="submit" class="btn btn-success">Importar</button>
-    <a href="{% url 'buyorder-list' %}" class="btn btn-secondary">Cancelar</a>
+    <a href="{% url 'buy-orders-list' %}" class="btn btn-secondary">Cancelar</a>
   </form>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/buyorder_import_xml.js' %}"></script>
+<script src="{% static 'js/buy_orders_import_xml.js' %}"></script>
 {% endblock %}
