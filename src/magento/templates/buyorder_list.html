@@ -1,65 +1,51 @@
 {% extends "base.html" %}
-{% load static %}
 
+{% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/buyorder_list.css' %}" />
+<link rel="stylesheet" href="{% static 'css/tables.css' %}" />
 {% endblock %}
 
-{% block title %}Ordens de Compra{% endblock %}
-
 {% block content %}
-  <h2>Ordens de Compra</h2>
-
-  <div class="filters">
-    <form method="get" class="filter-form">
-      <div class="form-group">
-        <label for="order_id">ID do Pedido:</label>
-        <input type="text" id="order_id" name="order_id" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="status">Status:</label>
-        <select id="status" name="status" class="form-control">
-          <option value="">Todos</option>
-          <option value="pago">Pago</option>
-          <option value="pendente">Pendente</option>
-          <option value="cancelado">Cancelado</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="date">Data:</label>
-        <input type="date" id="date" name="date" class="form-control">
-      </div>
-      <button type="submit" class="btn">Filtrar</button>
-    </form>
-  </div>
-
-  <div class="actions">
-    <a href="#" class="btn">Importar Pedidos</a>
-    <a href="#" class="btn">Exportar Pedidos</a>
-  </div>
-
-  <table class="buyorders-table">
-    <thead>
-      <tr>
-        <th>Ordem de Compra</th>
-        <th>ID da Ordem de Compra</th>
-        <th>Data da Compra</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for buyorder in buyorders %}
-        {% for detail in buyorder.buy_order_detail.all %}
+  {% if buyorders %}
+    <h2 class="mt-5">Ordens de Compra</h2>
+    <table class="table table-striped table-hover align-middle shadow-sm table-modern">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Criado em</th>
+          <th>Data da Compra</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in buyorders %}
+          {% for detail in order.buy_order_detail.all %}
             <tr>
-                <td>{{ buyorder.buy_order }}</td>
-                <td>{{ detail.buy_order_external_id }}</td>
-                <td>{{ detail.purchase_date|date:"d/m/Y" }}</td>
+              <td>{{ order.buy_order }}</td>
+              <td>{{ order.created_at }}</td>
+              <td>{{ detail.purchase_date|date:"d/m/Y" }}</td>
             </tr>
-        {% empty %}
-            <tr>
-                <td colspan="6">Nenhuma ordem de compra encontrada.</td>
-            </tr>
+          {% endfor %}
         {% endfor %}
-      {% endfor %}
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+    {% if is_paginated %}
+      <nav>
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            </li>
+          {% endif %}
+          <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  {% else %}
+    <p class="mt-5">Nenhuma ordem de compra encontrada.</p>
+  {% endif %}
 {% endblock %}

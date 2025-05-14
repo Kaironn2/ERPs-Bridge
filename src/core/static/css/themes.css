@@ -1,12 +1,17 @@
 :root {
-  --color-primary:   #c7ae90;
-  --color-primary-h: #b89e7d;
-  --color-secondary: #f5f1ec;
-  --color-success:   #4e9a51;
-  --color-danger:    #c0392b;
+  --color-primary:   #c7ae90;   /* Sidebar e elementos principais (creme) */
+  --color-primary-h: #D3A376;   /* Hover na sidebar/botões */
+  --color-secondary: #FFF2DF;   /* Fundo principal */
+  --color-accent:    #8C6E63;   /* Detalhes, ícones, bordas */
+  --color-dark:      #3E2522;   /* Títulos, textos importantes */
+  --color-light:     #fff;      /* Branco puro */
 
   --font-family:     'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-size-base:  1rem;
+
+  --text-color:      #3E2522;   /* Texto principal */
+  --text-color-light:#fff;      /* Texto claro */
+  --text-color-sidebar: #3E2522; /* Texto na sidebar */
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;

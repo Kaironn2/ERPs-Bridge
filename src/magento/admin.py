@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.urls import path
 
 from magento.models import BuyOrder, BuyOrderDetail, Customer
 
