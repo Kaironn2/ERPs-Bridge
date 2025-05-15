@@ -21,7 +21,7 @@
     <form method="post" enctype="multipart/form-data" action="{% url 'buy-orders-import' %}">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="btn btn-success">Importar</button>
+      <button type="submit" class="btn btn-primary">Importar</button>
     </form>
 
     <a href="#" class="btn btn-outline-primary">Exportar Relatório</a>

@@ -26,10 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Primeiro: restaura o estado
   restoreSidebarState();
 
-  // Segundo: escuta eventos para salvar o novo estado
   menus.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
