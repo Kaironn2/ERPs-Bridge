@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+  {# Exibição de mensagens via Bootstrap #}
+  {% if messages %}
+    {% for message in messages %}
+      <div
+        class="alert 
+               {% if message.level_tag == 'error' %}alert-danger
+               {% elif message.level_tag == 'success' %}alert-success
+               {% elif message.level_tag == 'warning' %}alert-warning
+               {% elif message.level_tag == 'info' %}alert-info
+               {% else %}alert-secondary{% endif %}
+               alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <h2>Importar Relatório XML</h2>
+  <form method="post" enctype="multipart/form-data" id="upload-form">
+    {% csrf_token %}
+    <div id="drop-area" style="border:2px dashed #ccc; padding:2rem; text-align:center; margin-bottom:1rem;">
+      <p>Arraste e solte seus arquivos XML aqui ou clique para selecionar</p>
+      <input type="file" id="fileElem" name="xml_file" accept=".xml" multiple style="display:none;">
+      <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('fileElem').click();">
+        Selecionar Arquivos
+      </button>
+      <div id="file-list" style="margin-top:1rem;"></div>
+    </div>
+    <button type="submit" class="btn btn-success">Importar</button>
+    <a href="{% url 'buy-orders-list' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/buy_orders_import_xml.js' %}"></script>
+{% endblock %}

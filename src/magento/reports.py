@@ -1,8 +1,10 @@
 import re
 
-from django.db import transaction
-
-from magento.models import BuyOrder, BuyOrderDetail, Customer
+from magento.repositories import (
+    insert_new_buy_orders,
+    upsert_buy_orders_details,
+    upsert_customers_from_df,
+)
 from utils.dataframe_utils import DataframeUtils as dfu
 from utils.parsers.xml_parser import XMLParser
 
@@ -11,68 +13,45 @@ class BuyOrderReportImporter:
     def __init__(self, xml_file):
         self.xml_file = xml_file
         self.df_orders = XMLParser.xml_2003(self.xml_file, pop_footer=True)
+        print(f'Linhas carregadas: {len(self.df_orders)}')
 
     def import_orders(self) -> None:
+        print('Linhas originais:', self.df_orders.shape)
+
         self._normalize_columns()
+        print('Após normalize_columns:', self.df_orders.shape)
+
         self._convert_columns_to_date()
+        print('Após convert_columns_to_date:', self.df_orders.shape)
+
         self._convert_str_currency_to_float()
+        print('Após convert_str_currency_to_float:', self.df_orders.shape)
+
         self._capitalize_columns()
+        print('Após capitalize_columns:', self.df_orders.shape)
+
         self._lowercase_columns()
+        print('Após lowercase_columns:', self.df_orders.shape)
+
         self._clean_phone_column()
-        self.insert_new_buy_order()
-        self.upsert_customers()
-        self.upsert_buy_order_details()
+        print('Após clean_phone_column:', self.df_orders.shape)
 
-    def insert_new_buy_order(self):
-        report_buy_orders = set(self.df_orders['buy_order'])
-        existing_buy_orders = set(
-            BuyOrder.objects.filter(
-                buy_order__in=report_buy_orders
-            ).values_list('buy_order', flat=True)
-        )
-        new_buy_orders = report_buy_orders - existing_buy_orders
-        if new_buy_orders:
-            BuyOrder.objects.bulk_create([
-                BuyOrder(buy_order=buy_order) for buy_order in new_buy_orders
-            ])
+        self._import_buy_orders()
+        print('Após import_new_buy_orders:', self.df_orders.shape)
 
-    def upsert_buy_order_details(self):
-        with transaction.atomic():
-            for _, row in self.df_orders.iterrows():
-                row_data = row.to_dict()
+        self._import_customers()
+        print('Após import_customers:', self.df_orders.shape)
 
-                buy_order_number = row_data.pop('buy_order')
-                buy_order_instance = BuyOrder.objects.get(buy_order=buy_order_number)
+        self._import_buy_orders_details()
 
-                email = row_data.pop('email')
-                customer_instance = Customer.objects.get(email=email)
+    def _import_buy_orders(self):
+        insert_new_buy_orders(self.df_orders['buy_order'].to_list())
 
-                BuyOrderDetail.objects.update_or_create(
-                    buy_order=buy_order_instance,
-                    email=customer_instance,
-                    defaults=row_data
-                )
+    def _import_customers(self):
+        upsert_customers_from_df(self.df_orders)
 
-    def upsert_customers(self) -> None:
-        for _, row in self.df_orders.iterrows():
-            row_data = row.to_dict()
-            email = row_data.get('email')
-            cpf = row_data.get('cpf')
-
-            customer = None
-
-            if email:
-                customer = Customer.objects.filter(email=email).first()
-            if not customer and cpf:
-                customer = Customer.objects.filter(cpf=cpf).first()
-
-            if customer:
-                for field, value in row_data.items():
-                    if hasattr(customer, field):
-                        setattr(customer, field, value)
-                customer.save()
-            else:
-                Customer.objects.create(**row_data)
+    def _import_buy_orders_details(self):
+        upsert_buy_orders_details(self.df_orders)
 
     def _normalize_columns(self) -> None:
         self.df_orders.columns = [
@@ -114,14 +93,16 @@ class BuyOrderReportImporter:
             'total_amount',
         ]
         for column in float_columns:
-            self.df[column] = self.df[column].str.replace(
+            self.df_orders[column] = self.df_orders[column].str.replace(
                 'R$', '', regex=False
             )
-            self.df[column] = self.df[column].str.replace('.', '', regex=False)
-            self.df[column] = self.df[column].str.replace(
+            self.df_orders[column] = self.df_orders[column].str.replace(
+                '.', '', regex=False
+            )
+            self.df_orders[column] = self.df_orders[column].str.replace(
                 ',', '.', regex=False
             )
-            self.df[column] = self.df[column].astype(float)
+            self.df_orders[column] = self.df_orders[column].astype(float)
 
     def _capitalize_columns(self) -> None:
         capitalize_columns = ['first_name', 'last_name']

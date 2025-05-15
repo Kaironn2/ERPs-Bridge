@@ -9,7 +9,7 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
     cpf = models.CharField(max_length=11, unique=True)
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     customer_group = models.CharField(max_length=255, blank=True, null=True)
     customer_since = models.DateTimeField(blank=True, null=True)
     last_purchase = models.DateTimeField(blank=True, null=True)
@@ -48,17 +48,16 @@ class BuyOrder(models.Model):
 
 
 class BuyOrderDetail(models.Model):
-    email = models.ForeignKey(
+    customer = models.ForeignKey(
         Customer, on_delete=models.PROTECT, related_name='buy_order_detail'
     )
-    buy_order = models.ForeignKey(
+    buy_order = models.OneToOneField(
         BuyOrder, on_delete=models.PROTECT, related_name='buy_order_detail'
     )
     buy_order_external_id = models.IntegerField(unique=True)
     purchase_date = models.DateTimeField()
     status = models.CharField(max_length=255)
     payment_type = models.CharField(max_length=255)
-    quantity_sold = models.IntegerField()
     shipping_amount = models.DecimalField(max_digits=10, decimal_places=2)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -71,7 +70,9 @@ class BuyOrderDetail(models.Model):
         verbose_name_plural = 'Detalhes das Ordens de Compra'
 
         indexes = [
-            models.Index(fields=['email'], name='buyorderdetail_email_idx'),
+            models.Index(
+                fields=['customer'], name='buyorderdetail_customer_idx'
+            ),
             models.Index(
                 fields=['buy_order'], name='buyorderdetail_buy_order_idx'
             ),
