@@ -39,14 +39,14 @@
       </thead>
       <tbody>
         {% for order in buyorders %}
-          {% for detail in order.buy_order_detail.all %}
+          {% with detail=order.buy_order_detail %}
             <tr>
               <td>{{ order.buy_order }}</td>
               <td>{{ detail.customer.first_name }}</td>
               <td>{{ detail.customer.last_name }}</td>
               <td>{{ detail.purchase_date|date:"d/m/Y" }}</td>
             </tr>
-          {% endfor %}
+          {% endwith %}
         {% endfor %}
       </tbody>
     </table>

@@ -37,7 +37,7 @@ class BuyOrderView(ListView):
 class BuyOrderImportXMLView(FormView):
     template_name = 'buy_orders_import_xml.html'
     form_class = XMLUploadForm
-    success_url = '/buyorders/'
+    success_url = '/buyorders/import/'
 
     def form_valid(self, form):
         xml_files = self.request.FILES.getlist('xml_file')

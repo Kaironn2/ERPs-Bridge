@@ -1,4 +1,5 @@
 import pandas as pd
+from django.utils.timezone import make_aware
 
 
 class DataframeUtils:
@@ -9,5 +10,10 @@ class DataframeUtils:
         for col in columns:
             df[col] = pd.to_datetime(
                 df[col], format=date_format, errors='coerce'
+            )
+            df[col] = df[col].apply(
+                lambda dt: make_aware(dt)
+                if pd.notnull(dt) and dt.tzinfo is None
+                else dt
             )
         return df

@@ -9,7 +9,7 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
     cpf = models.CharField(max_length=11, unique=True)
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     customer_group = models.CharField(max_length=255, blank=True, null=True)
     customer_since = models.DateTimeField(blank=True, null=True)
     last_purchase = models.DateTimeField(blank=True, null=True)
@@ -51,7 +51,7 @@ class BuyOrderDetail(models.Model):
     customer = models.ForeignKey(
         Customer, on_delete=models.PROTECT, related_name='buy_order_detail'
     )
-    buy_order = models.ForeignKey(
+    buy_order = models.OneToOneField(
         BuyOrder, on_delete=models.PROTECT, related_name='buy_order_detail'
     )
     buy_order_external_id = models.IntegerField(unique=True)
