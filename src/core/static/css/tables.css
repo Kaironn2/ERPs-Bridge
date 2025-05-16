@@ -1,20 +1,26 @@
 .table-modern {
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: #fff;
+  background: var(--color-content-container, #fff);
   box-shadow: 0 2px 12px rgba(140, 110, 99, 0.08);
 }
+
 .table-modern thead tr {
   background: var(--color-primary, #FFE0B2);
-  color: var(--color-dark, #3E2522);
-  border-bottom: 1px solid #D3A376;
+  color: var(--text-color, #3E2522);
+  border-bottom: 1px solid var(--color-border, #D3A376);
 }
+
 .table-modern tbody tr {
   transition: background 0.2s;
 }
+
 .table-modern tbody tr:hover {
-  background: #FFF2DF;
+  background: var(--color-primary, #7c3aed) !important;
+  color: var(--text-color-light, #fff) !important;
 }
+
 .table-modern td, .table-modern th {
   vertical-align: middle;
+  border-color: var(--color-border, #e5e7eb);
 }

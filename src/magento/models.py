@@ -65,7 +65,7 @@ class BuyOrderDetail(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-purchase_date']
+        ordering = ['-buy_order_external_id']
         verbose_name = 'Detalhes da Ordem de Compra'
         verbose_name_plural = 'Detalhes das Ordens de Compra'
 

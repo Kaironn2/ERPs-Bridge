@@ -1,18 +1,5 @@
 @import 'themes.css';
 
-.btn {
-  display: inline-block;
-  font-family: var(--font-family);
-  font-size: var(--font-size-base);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: var(--transition);
-  text-decoration: none;
-  text-align: center;
-}
-
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--text-color-light);
