@@ -8,13 +8,39 @@
 {% block content %}
   <div class="content-container p-4 rounded shadow-sm">
     <h2 class="mt-5">Ordens de Compra</h2>
-    <form method="get" class="mb-4 d-flex flex-wrap gap-2" autocomplete="off">
-      {{ filter_form.buyorder }}
-      {{ filter_form.created_at }}
-      <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
-      {% if request.GET %}
-        <a href="?" class="btn btn-outline-secondary ms-2">Limpar</a>
-      {% endif %}
+    <form method="get" class="mb-4" autocomplete="off">
+      <div class="d-flex align-items-end gap-2">
+        <div class="ms-auto d-flex align-items-end gap-2">
+          <!-- Filtros -->
+          <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filtrosCollapse" aria-expanded="false" aria-controls="filtrosCollapse">
+            <i class="bi bi-funnel"></i> Filtros
+          </button>
+          <!-- Ordem de Compra -->
+          <div style="max-width: 250px;">
+            <label for="{{ filter_form.buy_order.id_for_label }}" class="form-label mb-0 small">Ordem de Compra</label>
+            {{ filter_form.buy_order }}
+          </div>
+          <!-- Filtrar e Limpar -->
+          <div>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            {% if request.GET %}
+              <a href="?" class="btn btn-outline-secondary ms-2">Limpar</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <!-- Filtros collapse -->
+      <div class="collapse mt-2" id="filtrosCollapse">
+        <div class="card card-body p-2">
+          <div class="row g-2">
+            <div class="col-auto">
+              <label for="{{ filter_form.purchase_date.id_for_label }}" class="form-label mb-0 small">Data de Compra</label>
+              {{ filter_form.purchase_date }}
+            </div>
+            <!-- TODO: adicionar outros filtros -->
+          </div>
+        </div>
+      </div>
     </form>
     
     <div class="mb-3 d-flex gap-2">

@@ -17,13 +17,13 @@ class BuyOrderView(ListView):
         queryset = super().get_queryset()
         self.filter_form = BuyOrderFilterForm(self.request.GET)
         if self.filter_form.is_valid():
-            buyorder = self.filter_form.cleaned_data.get('buyorder')
-            created_at = self.filter_form.cleaned_data.get('created_at')
+            buy_order = self.filter_form.cleaned_data.get('buy_order')
+            purchase_date = self.filter_form.cleaned_data.get('purchase_date')
 
-            if buyorder:
-                queryset = queryset.filter(buy_order__icontains=buyorder)
-            if created_at:
-                queryset = queryset.filter(created_at__icontains=created_at)
+            if buy_order:
+                queryset = queryset.filter(buy_order__icontains=buy_order)
+            if purchase_date:
+                queryset = queryset.filter(buy_order_detail__purchase_date__icontains=purchase_date)
         return queryset
 
     def get_context_data(self, **kwargs):

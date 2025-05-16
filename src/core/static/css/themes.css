@@ -5,8 +5,8 @@
   --color-content-container:  #fff;
   --color-border:             #e5e7eb;
 
-  --color-primary:            #7c3aed;
-  --color-primary-h:          #6d28d9;
+  --color-primary:            #6d28d9;
+  --color-primary-h:          #7c3aed;
   --color-success:            #22c55e;
   --color-danger:             #ef4444;
   --color-warning:            #facc15;
@@ -33,4 +33,5 @@
 
 .content-container {
   background-color: var(--color-content-container);
+  min-height: 94vh;
 }

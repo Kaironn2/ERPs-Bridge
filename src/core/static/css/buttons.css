@@ -3,26 +3,9 @@
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--text-color-light);
+  border-color: var(--color-primary-h);
 }
 .btn-primary:hover {
   background-color: var(--color-primary-h);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--color-primary);
   border-color: var(--color-primary);
-}
-.btn-secondary:hover {
-  background-color: var(--color-primary);
-  color: var(--color-secondary);
-}
-
-.btn-success {
-  background-color: var(--color-success);
-  color: #fff;
-}
-.btn-danger {
-  background-color: var(--color-danger);
-  color: #fff;
 }
