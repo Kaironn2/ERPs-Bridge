@@ -1,6 +1,6 @@
 from django import forms
 
-from magento.models import BuyOrderDetail
+from magento.models import BuyOrderDetail, Customer
 
 
 class BuyOrderFilterForm(forms.Form):
@@ -57,3 +57,41 @@ class BuyOrderFilterForm(forms.Form):
 
 class XMLUploadForm(forms.Form):
     xml_file = forms.FileField(label='Arquivo XML', required=True)
+
+
+class CustomerFilterForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.customer_group_choices()
+
+    first_name = forms.CharField(
+        label='Nome',
+        required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Pesquisar...'}
+        ),
+    )
+    email = forms.DateField(
+        label='E-mail',
+        required=False,
+        widget=forms.DateInput(
+            attrs={'type': 'date', 'class': 'form-control'}
+        ),
+    )
+    customer_group = forms.ChoiceField(
+        label='Grupo do Cliente',
+        required=False,
+        choices=[],
+        widget=forms.Select(attrs={'class': 'form-select'}),
+    )
+
+    def customer_group_choices(self):
+        customer_group_choices = set(
+            Customer.objects.values_list(
+                'customer_group', flat=True
+            ).distinct()
+        )
+        customer_group_choices = [(s, s) for s in customer_group_choices if s]
+        self.fields['customer_group'].choices = [
+            ('', 'Todos')
+        ] + customer_group_choices

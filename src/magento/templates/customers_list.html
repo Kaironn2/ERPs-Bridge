@@ -4,16 +4,16 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/tables.css' %}" />
 <link rel="stylesheet" href="{% static 'css/pagination.css' %}" />
-<link rel="stylesheet" href="{% static 'css/buy_orders_list.css' %}" />
+<link rel="stylesheet" href="{% static 'css/customers_list.css' %}" />
 {% endblock %}
 
 {% block content %}
   <div class="content-container p-4 rounded shadow-sm">
-    <h2 class="mt-5">Ordens de Compra</h2>
+    <h2 class="mt-5">Clientes</h2>
     <form method="get" class="mb-4" autocomplete="off">
       <div class="d-flex align-items-end gap-2">
-        <a href="{% url 'buy-orders-import' %}" class="btn btn-secondary">Importar</a>
-        <a href="{% url 'buy-orders-import' %}" class="btn btn-secondary">Exportar</a>
+        <a href="#" class="btn btn-secondary">Importar</a>
+        <a href="#" class="btn btn-secondary">Exportar</a>
         <div class="ms-auto d-flex align-items-end gap-2">
           {% if request.GET %}
               <a href="?" class="btn btn-outline-secondary ms-2">Limpar</a>
@@ -22,10 +22,10 @@
           <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
             <i class="bi bi-funnel"></i> Filtros
           </button>
-          <!-- Ordem de Compra -->
+          <!-- Email -->
           <div style="max-width: 250px;">
-            <label for="{{ filter_form.buy_order.id_for_label }}" class="form-label mb-0 small">Ordem de Compra</label>
-            {{ filter_form.buy_order }}
+            <label for="{{ filter_form.email.id_for_label }}" class="form-label mb-0 small">Email</label>
+            {{ filter_form.email }}
           </div>
           <!-- Filtrar e Limpar -->
           <div>
@@ -38,28 +38,24 @@
         <div class="card card-body p-2">
           <div class="row g-2">
             <div class="col-auto">
-              <label for="{{ filter_form.purchase_date.id_for_label }}" class="form-label mb-0 small">Data de Compra</label>
-              {{ filter_form.purchase_date }}
+              <label for="{{ filter_form.first_name.id_for_label }}" class="form-label mb-0 small">Nome</label>
+              {{ filter_form.first_name }}
             </div>
             <div>
-              <label for="{{ filter_form.status.id_for_label }}" class="form-label mb-0 small">Status</label>
-              {{ filter_form.status }}
-            </div>
-            <div>
-              <label for="{{ filter_form.payment_type.id_for_label }}" class="form-label mb-0 small">Método de Pagamento</label>
-              {{ filter_form.payment_type }}
+              <label for="{{ filter_form.customer_group.id_for_label }}" class="form-label mb-0 small">Grupo de Clientes</label>
+              {{ filter_form.customer_group }}
             </div>
           </div>
         </div>
       </div>
     </form>
     
-    {% if buyorders %}
-    <div id="buy-orders-table-container">
-        {% include "partials/buy_orders_table.html" %}
+    {% if customers %}
+    <div id="customers-table-container">
+        {% include "partials/customers_table.html" %}
     </div>
     {% else %}
-      <p class="mt-5">Nenhuma ordem de compra encontrada.</p>
+      <p class="mt-5">Nenhum cliente encontrado.</p>
     {% endif %}
   </div>
 

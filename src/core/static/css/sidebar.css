@@ -56,3 +56,9 @@
     margin-left: 280px;
   }
 }
+.nav-link.active-link {
+  border-left: 4px solid var(--color-primary);
+  background: rgba(0,0,0,0.03);
+  color: var(--color-primary) !important;
+  font-weight: 500;
+}

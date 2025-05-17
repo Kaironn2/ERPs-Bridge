@@ -13,7 +13,6 @@ class BuyOrderReportImporter:
     def __init__(self, xml_file):
         self.xml_file = xml_file
         self.df_orders = XMLParser.xml_2003(self.xml_file, pop_footer=True)
-        print(f'Linhas carregadas: {len(self.df_orders)}')
 
     def import_orders(self) -> None:
         self._normalize_columns()

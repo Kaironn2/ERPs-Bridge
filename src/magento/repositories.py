@@ -62,7 +62,6 @@ def upsert_buy_orders_details(df: pd.DataFrame) -> None:
             ).first()
 
             if not (customer and buy_order):
-                print(f'Cliente ou ordem de compra não encontrados: {row}')
                 continue
 
             detail_defaults = {

@@ -1,0 +1,54 @@
+<div class="offcanvas offcanvas-start d-md-flex flex-column flex-shrink-0 p-3 sidebar" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="width: 280px;">
+<a href="{% url 'home' %}" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+    <span class="fs-5 fw-semibold">ERPs Bridge</span>
+</a>
+<ul class="nav nav-pills flex-column mb-auto">
+    <li>
+    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#magento-collapse" role="button" aria-expanded="false" aria-controls="magento-collapse">
+        Magento
+        <span class="ms-2"><i class="bi bi-chevron-down"></i></span>
+    </a>
+    <div class="collapse" id="magento-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ps-3">
+        <li>
+            <a href="{% url 'buy-orders-list' %}"
+            class="nav-link d-flex justify-content-between align-items-center {% if request.resolver_match.url_name == 'buy-orders-list' %}active-link{% endif %}">
+            Ordens de Compra
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'customers-list' %}"
+            class="nav-link d-flex justify-content-between align-items-center {% if request.resolver_match.url_name == 'customers-list' %}active-link{% endif %}">
+            Clientes
+            </a>
+        </li>
+        </ul>
+    </div>
+    </li>
+    <li>
+    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#eccosys-collapse" role="button" aria-expanded="false" aria-controls="eccosys-collapse">
+        Eccosys
+        <span class="ms-2"><i class="bi bi-chevron-down"></i></span>
+    </a>
+    <div class="collapse" id="eccosys-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ps-3">
+        <li><a href="#" class="nav-link">Produtos</a></li>
+        <li><a href="#" class="nav-link">Logística</a></li>
+        </ul>
+    </div>
+    </li>
+    <li class="border-top my-3"></li>
+    <li>
+    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#account-collapse" role="button" aria-expanded="false" aria-controls="account-collapse">
+        Conta
+        <span class="ms-2"><i class="bi bi-chevron-down"></i></span>
+    </a>
+    <div class="collapse" id="account-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ps-3">
+        <li><a href="#" class="nav-link">Perfil</a></li>
+        <li><a href="#" class="nav-link">Sair</a></li>
+        </ul>
+    </div>
+    </li>
+</ul>
+</div>

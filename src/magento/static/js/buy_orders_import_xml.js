@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   form.addEventListener('submit', function (e) {
-    e.preventDefault();
+    // e.preventDefault();
 
     if (!droppedFiles || droppedFiles.length === 0) {
       alert('Selecione ou arraste arquivos XML antes de enviar.');
@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fileInput.files = dt.files;
         droppedFiles = fileInput.files;
         showFiles(droppedFiles);
+        setTimeout(() => window.location.reload(), 1000);
       })
       .catch((error) => {
         console.error(error);
