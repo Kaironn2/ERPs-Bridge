@@ -16,32 +16,16 @@ class BuyOrderReportImporter:
         print(f'Linhas carregadas: {len(self.df_orders)}')
 
     def import_orders(self) -> None:
-        print('Linhas originais:', self.df_orders.shape)
-
         self._normalize_columns()
-        print('Após normalize_columns:', self.df_orders.shape)
-
         self._convert_columns_to_date()
-        print('Após convert_columns_to_date:', self.df_orders.shape)
-
         self._convert_str_currency_to_float()
-        print('Após convert_str_currency_to_float:', self.df_orders.shape)
-
         self._capitalize_columns()
-        print('Após capitalize_columns:', self.df_orders.shape)
-
         self._lowercase_columns()
-        print('Após lowercase_columns:', self.df_orders.shape)
-
+        self._format_payment_type()
         self._clean_phone_column()
-        print('Após clean_phone_column:', self.df_orders.shape)
-
+        self._clean_cpf_column()
         self._import_buy_orders()
-        print('Após import_new_buy_orders:', self.df_orders.shape)
-
         self._import_customers()
-        print('Após import_customers:', self.df_orders.shape)
-
         self._import_buy_orders_details()
 
     def _import_buy_orders(self):
@@ -126,3 +110,17 @@ class BuyOrderReportImporter:
                 .astype(str)
                 .apply(lambda x: re.sub(r'\D', '', x))
             )
+
+    def _clean_cpf_column(self) -> None:
+        if 'cpf' in self.df_orders.columns:
+            self.df_orders['cpf'] = (
+                self.df_orders['cpf']
+                .astype(str)
+                .apply(lambda x: re.sub(r'\D', '', x))
+            )
+
+    def _format_payment_type(self) -> None:
+        if 'payment_type' in self.df_orders.columns:
+            self.df_orders['payment_type'] = self.df_orders[
+                'payment_type'
+            ].replace('não é necessário efetuar um pagamento.', 'saldo')

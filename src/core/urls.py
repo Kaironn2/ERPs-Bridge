@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 
 from core.views import HomeView
-from magento.views import BuyOrderImportXMLView, BuyOrderView
+from magento.views import BuyOrderImportXMLView, BuyOrderView, buy_orders_table
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,4 +13,5 @@ urlpatterns = [
         BuyOrderImportXMLView.as_view(),
         name='buy-orders-import',
     ),
+    path('buyorders/table/', buy_orders_table, name='buy-orders-table'),
 ]

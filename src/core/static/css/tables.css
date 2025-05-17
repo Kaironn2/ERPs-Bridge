@@ -20,7 +20,24 @@
   color: var(--text-color-light, #fff) !important;
 }
 
-.table-modern td, .table-modern th {
+.table-modern td,
+.table-modern th {
   vertical-align: middle;
   border-color: var(--color-border, #e5e7eb);
+  white-space: nowrap;
+}
+
+.table-scroll,
+.table-scroll-h {
+  width: 100%;
+  overflow: auto;
+}
+
+.table-scroll {
+  max-height: 35rem;
+}
+
+.table-scroll-v {
+  max-height: 35rem;
+  overflow-y: auto;
 }

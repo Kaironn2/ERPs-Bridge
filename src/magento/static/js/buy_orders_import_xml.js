@@ -96,15 +96,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
   showFiles(droppedFiles);
 });
-
-document.addEventListener('DOMContentLoaded', function () {
-  const fileInput = document.getElementById('fileElem');
-  const form = document.getElementById('upload-form');
-  if (fileInput && form) {
-    fileInput.addEventListener('change', function () {
-      if (fileInput.files.length > 0) {
-        form.submit();
-      }
-    });
-  }
-});

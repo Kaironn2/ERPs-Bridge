@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.shortcuts import render
 from django.views.generic import FormView, ListView
 
 from magento.forms import BuyOrderFilterForm, XMLUploadForm
@@ -19,11 +21,21 @@ class BuyOrderView(ListView):
         if self.filter_form.is_valid():
             buy_order = self.filter_form.cleaned_data.get('buy_order')
             purchase_date = self.filter_form.cleaned_data.get('purchase_date')
+            status = self.filter_form.cleaned_data.get('status')
+            payment_type = self.filter_form.cleaned_data.get('payment_type')
 
             if buy_order:
                 queryset = queryset.filter(buy_order__icontains=buy_order)
             if purchase_date:
-                queryset = queryset.filter(buy_order_detail__purchase_date__icontains=purchase_date)
+                queryset = queryset.filter(
+                    buy_order_detail__purchase_date__icontains=purchase_date
+                )
+            if status:
+                queryset = queryset.filter(buy_order_detail__status=status)
+            if payment_type:
+                queryset = queryset.filter(
+                    buy_order_detail__payment_type=payment_type
+                )
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -69,3 +81,39 @@ class BuyOrderImportXMLView(FormView):
             )
 
         return super().form_valid(form)
+
+
+def buy_orders_table(request):
+    queryset = BuyOrder.objects.all().order_by('-buy_order')
+    filter_form = BuyOrderFilterForm(request.GET)
+    if filter_form.is_valid():
+        buy_order = filter_form.cleaned_data.get('buy_order')
+        purchase_date = filter_form.cleaned_data.get('purchase_date')
+        status = filter_form.cleaned_data.get('status')
+        payment_type = filter_form.cleaned_data.get('payment_type')
+
+        if buy_order:
+            queryset = queryset.filter(buy_order__icontains=buy_order)
+        if purchase_date:
+            queryset = queryset.filter(
+                buy_order_detail__purchase_date__icontains=purchase_date
+            )
+        if status:
+            queryset = queryset.filter(buy_order_detail__status=status)
+        if payment_type:
+            queryset = queryset.filter(
+                buy_order_detail__payment_type=payment_type
+            )
+
+    paginator = Paginator(queryset, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(
+        request,
+        'partials/buy_orders_table.html',
+        {
+            'buyorders': page_obj.object_list,
+            'page_obj': page_obj,
+            'is_paginated': page_obj.has_other_pages(),
+        },
+    )

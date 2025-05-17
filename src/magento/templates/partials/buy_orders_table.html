@@ -1,0 +1,120 @@
+{% load phone_format %}
+{% load cpf_format %}
+{% load querystring %}
+{% load range_custom %}
+
+<div class="table-scroll">
+  <table class="table table-light table-hover table-bordered align-middle shadow-sm table-modern">
+    <thead class="table-light">
+      <tr>
+        <th>Ordem de Compra</th>
+        <th>Data de Compra</th>
+        <th>Nome</th>
+        <th>cpf</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Método de Pagamento</th>
+        <th>Status</th>
+        <th>Frete</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in buyorders %}
+        {% with detail=order.buy_order_detail %}
+        <tr>
+          <td>{{ order.buy_order }}</td>
+          <td>{{ detail.purchase_date|date:"d/m/Y" }}</td>
+          <td>{{ detail.customer.first_name }} {{ detail.customer.last_name }}</td>
+          <td>{{ detail.customer.cpf|format_cpf }}</td>
+          <td>{{ detail.customer.email }}</td>
+          <td>{{ detail.customer.phone|format_phone }}</td>
+          <td>{{ detail.payment_type }}</td>
+          <td>{{ detail.status }}</td>
+          <td>{{ detail.shipping_amount|floatformat:2 }}</td>
+          <td>{{ detail.total_amount|floatformat:2 }}</td>
+        </tr>
+        {% endwith %}
+      {% empty %}
+        <tr>
+          <td colspan="10" class="text-center">Nenhum pedido encontrado.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if is_paginated %}
+  <nav class="mt-4">
+    <ul class="pagination">
+      {% querystring_remove request 'page' as clean_querystring %}
+
+      <!-- Primeiro -->
+      <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %}">
+        <a class="page-link page-ajax"
+           href="{% url 'buy-orders-table' %}?page=1{% if clean_querystring %}&{{ clean_querystring }}{% endif %}">
+          Primeiro
+        </a>
+      </li>
+
+      <!-- Anterior -->
+      <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+        <a class="page-link page-ajax"
+           href="{% url 'buy-orders-table' %}?page={% if page_obj.has_previous %}{{ page_obj.previous_page_number }}{% else %}1{% endif %}{% if clean_querystring %}&{{ clean_querystring }}{% endif %}">
+          &lt;
+        </a>
+      </li>
+
+      {% with total=page_obj.paginator.num_pages current=page_obj.number %}
+        {% with start=current|add:'-2' %}
+          {% if start < 1 %}
+            {% with start=1 %}
+            {% endwith %}
+          {% endif %}
+          {% with end=start|add:'4' %}
+            {% if end > total %}
+              {% with end=total %}
+              {% endwith %}
+              {% with start=end|add:'-4' %}
+                {% if start < 1 %}
+                  {% with start=1 %}
+                  {% endwith %}
+                {% endif %}
+              {% endwith %}
+            {% endif %}
+            {% for i in start|range_custom:end %}
+              {% if i > 0 and i <= total %}
+                <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                  {% if page_obj.number == i %}
+                    <span class="page-link">{{ i }}</span>
+                  {% else %}
+                    <a class="page-link page-ajax"
+                       href="{% url 'buy-orders-table' %}?page={{ i }}{% if clean_querystring %}&{{ clean_querystring }}{% endif %}">
+                      {{ i }}
+                    </a>
+                  {% endif %}
+                </li>
+              {% endif %}
+            {% endfor %}
+          {% endwith %}
+        {% endwith %}
+      {% endwith %}
+
+      <!-- Próxima -->
+      <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+        <a class="page-link page-ajax"
+           href="{% url 'buy-orders-table' %}?page={% if page_obj.has_next %}{{ page_obj.next_page_number }}{% else %}{{ page_obj.paginator.num_pages }}{% endif %}{% if clean_querystring %}&{{ clean_querystring }}{% endif %}">
+          &gt;
+        </a>
+      </li>
+
+      <!-- Último -->
+      <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}disabled{% endif %}">
+        <a class="page-link page-ajax"
+           href="{% url 'buy-orders-table' %}?page={{ page_obj.paginator.num_pages }}{% if clean_querystring %}&{{ clean_querystring }}{% endif %}">
+          Último
+        </a>
+      </li>
+    </ul>
+  </nav>
+{% endif %}

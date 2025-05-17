@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-
 {% load static %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/tables.css' %}" />
+<link rel="stylesheet" href="{% static 'css/buy_orders_list.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -10,9 +11,14 @@
     <h2 class="mt-5">Ordens de Compra</h2>
     <form method="get" class="mb-4" autocomplete="off">
       <div class="d-flex align-items-end gap-2">
+        <a href="{% url 'buy-orders-import' %}" class="btn btn-secondary">Importar</a>
+        <a href="{% url 'buy-orders-import' %}" class="btn btn-secondary">Exportar</a>
         <div class="ms-auto d-flex align-items-end gap-2">
+          {% if request.GET %}
+              <a href="?" class="btn btn-outline-secondary ms-2">Limpar</a>
+          {% endif %}
           <!-- Filtros -->
-          <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filtrosCollapse" aria-expanded="false" aria-controls="filtrosCollapse">
+          <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
             <i class="bi bi-funnel"></i> Filtros
           </button>
           <!-- Ordem de Compra -->
@@ -23,86 +29,41 @@
           <!-- Filtrar e Limpar -->
           <div>
             <button type="submit" class="btn btn-primary">Filtrar</button>
-            {% if request.GET %}
-              <a href="?" class="btn btn-outline-secondary ms-2">Limpar</a>
-            {% endif %}
           </div>
         </div>
       </div>
       <!-- Filtros collapse -->
-      <div class="collapse mt-2" id="filtrosCollapse">
+      <div class="collapse mt-2" id="filtersCollapse">
         <div class="card card-body p-2">
           <div class="row g-2">
             <div class="col-auto">
               <label for="{{ filter_form.purchase_date.id_for_label }}" class="form-label mb-0 small">Data de Compra</label>
               {{ filter_form.purchase_date }}
             </div>
-            <!-- TODO: adicionar outros filtros -->
+            <div>
+              <label for="{{ filter_form.status.id_for_label }}" class="form-label mb-0 small">Status</label>
+              {{ filter_form.status }}
+            </div>
+            <div>
+              <label for="{{ filter_form.payment_type.id_for_label }}" class="form-label mb-0 small">Método de Pagamento</label>
+              {{ filter_form.payment_type }}
+            </div>
           </div>
         </div>
       </div>
     </form>
     
-    <div class="mb-3 d-flex gap-2">
-      <form method="post" enctype="multipart/form-data" action="{% url 'buy-orders-import' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success btn-sm">Importar</button>
-        <a href="#" class="btn btn-primary btn-sm">Exportar</a>
-      </form>
-    </div>
-
     {% if buyorders %}
-      <table class="table table-light table-hover table-bordered align-middle shadow-sm table-modern">
-        <thead class="table-light">
-          <tr>
-            <th>Ordem de Compra</th>
-            <th>Nome</th>
-            <th>Sobrenome</th>
-            <th>Data de Compra</th>
-            <th>Método de Pagamento</th>
-            <th>Status</th>
-            <th>Frete</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for order in buyorders %}
-            {% with detail=order.buy_order_detail %}
-              <tr>
-                <td>{{ order.buy_order }}</td>
-                <td>{{ detail.customer.first_name }}</td>
-                <td>{{ detail.customer.last_name }}</td>
-                <td>{{ detail.purchase_date|date:"d/m/Y" }}</td>
-                <td>{{ detail.payment_type }}</td>
-                <td>{{ detail.status }}</td>
-                <td>{{ detail.shipping_amount|floatformat:2 }}</td>
-                <td>{{ detail.total_amount|floatformat:2 }}</td>
-              </tr>
-            {% endwith %}
-          {% endfor %}
-        </tbody>
-      </table>
-      {% if is_paginated %}
-        <nav>
-          <ul class="pagination">
-            {% if page_obj.has_previous %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-              </li>
-            {% endif %}
-            <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
-            {% if page_obj.has_next %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a>
-              </li>
-            {% endif %}
-          </ul>
-        </nav>
-      {% endif %}
+    <div id="buy-orders-table-container">
+        {% include "partials/buy_orders_table.html" %}
+    </div>
     {% else %}
       <p class="mt-5">Nenhuma ordem de compra encontrada.</p>
     {% endif %}
   </div>
 
+{% endblock %}
+{% block extra_js %}
+  <script src="{% static 'js/buy_orders_list.js' %}"></script>
+  <script src="{% static 'js/buy_orders_table.js' %}"></script>
 {% endblock %}
